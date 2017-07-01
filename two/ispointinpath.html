@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>clip</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0">
+</head>
+<body>
+	<canvas id="canvas" style="display: block;margin: 50px auto;border:1px solid #000;">不支持
+		浏览器不支持canvas，请更新浏览器！
+	</canvas>
+    <script>
+    	var balls = [];
+    	var canvas = document.getElementById("canvas");
+    	var context = canvas.getContext("2d");
+
+    	window.onload = function (){
+
+    		canvas.width = 800;
+    		canvas.height = 800;
+
+            for (var i = 0; i < 10; i++) {
+                aball={
+            		x: Math.random()*canvas.width,
+            		y: Math.random()*canvas.height,
+            		r: Math.random()*50 +20
+            	}
+
+            	balls[i] = aball;
+            }
+
+            drawballs();
+            canvas.addEventListener("mouseup",detect);
+
+    	}
+
+    	function drawballs(x,y){
+
+    		for (var i = 0; i < balls.length; i++) {
+    			
+
+    			context.beginPath();
+    			context.arc(balls[i].x,balls[i].y,balls[i].r,0,Math.PI*2);
+    			
+    			if(context.isPointInPath(x,y)){
+
+    			    context.fillStyle = "red";
+    			    context.fill();
+                }else{
+
+                	context.fillStyle = "#058";
+				    context.fill();
+				}
+
+    		}
+    	}
+
+    	function detect(event){
+
+    		var x = event.clientX - canvas.getBoundingClientRect().left;
+    		var y = event.clientY - canvas.getBoundingClientRect().top;
+
+    		drawballs(x,y);
+            
+
+    	}
+    </script>
+</body>
+</html>	

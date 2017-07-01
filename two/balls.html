@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>balls</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0">
+</head>
+<body>
+	<canvas id="canvas" style="display: block;margin: 50px auto;border:1px solid #000;">不支持
+		浏览器不支持canvas，请更新浏览器！
+	</canvas>
+	<script>
+		var balls = [];
+		window.onload = function(){
+            var canvas = document.getElementById('canvas');
+
+            canvas.width = 800;
+            canvas.height = 800;
+
+            var context = canvas.getContext("2d");
+
+            // context.globalAlpha = 0.7;
+
+            for (var i = 0; i < 100; i++) {
+
+            	var R = Math.floor(Math.random()*255);
+            	var G = Math.floor(Math.random()*255);
+            	var B = Math.floor(Math.random()*255);
+            	var radius = Math.random()*50 + 20 ;
+            	aball = {
+            		color:"rgb("+ R +" , "+ G +" , "+ B +")",
+            		radius:radius,
+            		x:Math.random()*(canvas.width - 2*radius),
+            		y:Math.random()*(canvas.height - 2*radius),
+            		vx:(Math.random()*5+5) * Math.pow(-1,Math.floor(Math.random()*100)),
+            		vy:(Math.random()*5+5) * Math.pow(-1,Math.floor(Math.random()*100)),
+            	},
+            	balls[i] = aball;
+            }
+            
+            setInterval(
+                function(){
+                	drawballs(context);
+                	update(canvas.width,canvas.height);
+                },
+                50
+            )	 
+		}
+
+		function drawballs(cxt){
+
+			cxt.clearRect(0,0,canvas.width,canvas.height);
+
+			for (var i = 0; i < balls.length; i++) {
+				cxt.globalCompositeOperation = "lighter";
+
+				cxt.fillStyle = balls[i].color;
+
+				cxt.beginPath();
+
+			    cxt.arc(balls[i].x,balls[i].y,balls[i].radius,0,2*Math.PI);
+			    cxt.closePath();
+
+			    cxt.fill();
+			}
+		}
+
+		function update(){
+
+			for (var i = 0; i < balls.length; i++) {
+				
+				balls[i].x += balls[i].vx ;
+				balls[i].y += balls[i].vy ;
+
+				if(balls[i].x>canvas.width - balls[i].radius ){
+					balls[i].x = canvas.width - balls[i].radius ;
+					balls[i].vx = -balls[i].vx;
+				} 
+				if(balls[i].x<balls[i].radius ){
+					balls[i].x = balls[i].radius ;
+					balls[i].vx = -balls[i].vx;
+				} 
+
+				if(balls[i].y>canvas.height - balls[i].radius ){
+					balls[i].y = canvas.height - balls[i].radius ;
+					balls[i].vy = -balls[i].vy;
+				} 
+				if(balls[i].y<balls[i].radius ){
+					balls[i].y = balls[i].radius ;
+					balls[i].vy = -balls[i].vy;
+				}    
+			}
+		}
+	</script>
+</body>
+</html>

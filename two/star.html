@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0">
+</head>
+<body>
+	<canvas id="canvas" style="display:block;margin:50px auto;">
+	当前浏览器不支持canvas，请尝试使用最新版本的浏览器。
+	</canvas>
+	<script>
+		window.onload = function (){
+
+			WINDOW_WIDTH = document.documentElement.clientWidth-20;
+	        WINDOW_HEIGHT = document.documentElement.clientHeight-20;
+
+			var canvas = document.getElementById('canvas');
+
+			canvas.width = 1000;
+			canvas.height = 800;
+
+			var context = canvas.getContext("2d");
+
+
+			//使用context绘图；
+			
+			var skyStyle = context.createRadialGradient(canvas.width/2,canvas.height,0,canvas.width/2,canvas.height,canvas.height);
+            skyStyle.addColorStop(0,'#035')
+            skyStyle.addColorStop(1,'black');
+            context.fillStyle = skyStyle;
+		    context.fillRect(0,0,canvas.width,canvas.height);
+
+		    // pathRoundRect(context,100,100,10);
+
+		    for (var i = 0; i < 200; i++) {
+		    	var R = Math.random()*5 + 5;
+		    	var x = Math.random()*canvas.width;
+		    	var y = Math.random()*canvas.height*0.65;
+		    	var a = Math.random()*360;
+
+		    	drawStar(context,x,y,R,a);
+
+		    }
+
+		    drawMoon(context,2,700,200,80,30);
+
+		    drawLand(context);
+
+		    context.font = "bold 40px Arial";
+		    context.fillStyle = "#058";
+		    context.fillText("欢迎欢迎！",40,100);
+		    
+		}
+
+		function drawLand(cxt){
+
+			cxt.save();
+
+			cxt.beginPath();
+			cxt.moveTo(0,600);
+			cxt.bezierCurveTo(440,400,560,800,1000,600);
+			cxt.lineTo(1000,800);
+			cxt.lineTo(0,800);
+			cxt.closePath();
+
+			var landStyle = cxt.createLinearGradient(0,800,0,0);
+			landStyle.addColorStop(0.0,"#030");
+			landStyle.addColorStop(1.0,"#580");
+			cxt.fillStyle = landStyle;
+
+			cxt.fill();
+
+			cxt.restore();
+
+		}
+
+		function drawMoon(cxt,d,x,y,R,rot,/*optional*/fillColor){
+
+			cxt.save();
+
+			cxt.translate(x,y);
+			cxt.rotate(rot/180*Math.PI);
+			cxt.scale(R,R);
+
+			moonPath(cxt,d);
+
+			cxt.fillStyle = fillColor || "#fb5";
+			cxt.fill();
+
+			cxt.restore();
+
+		}
+
+		function moonPath(cxt,d){
+
+			cxt.beginPath();
+
+            cxt.arc(0,0,1,0.5*Math.PI,1.5*Math.PI,true);
+			cxt.moveTo(0,-1);
+			cxt.quadraticCurveTo(1.2,0,0,1);
+			// cxt.arcTo(d,0,0,1,dis(0,-1,d,0)/d);
+          
+			cxt.closePath();
+		}
+
+		function dis(x1,y1,x2,y2){
+			return Math.sqrt( (x1-x2)*(x1-x2) + (y1-y2)*(y1-y2) );
+		}
+
+		function drawStar(cxt,x,y,R,rot){
+
+			cxt.save();
+
+			cxt.translate( x , y);
+			cxt.rotate(rot/180*Math.PI);
+			cxt.scale(R,R);
+
+			starPath(cxt);
+
+		    cxt.fillStyle = "#fb3";
+		    cxt.fill();
+
+		    cxt.restore();
+		}
+
+		function starPath(cxt){
+
+			cxt.beginPath();
+		    for (var i = 0; i < 5; i++) {
+		    	cxt.lineTo( Math.cos( (18 + i*72 )/180*Math.PI),
+		    					-Math.sin( (18 + i*72 )/180*Math.PI) );
+		    	cxt.lineTo( Math.cos( (54 + i*72 )/180*Math.PI)*0.5,
+		    					-Math.sin( (54 + i*72 )/180*Math.PI)*0.5 );
+		    }
+		    cxt.closePath();
+		}
+
+		
+	</script>
+</body>
+</html>

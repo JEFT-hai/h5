@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>2048</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0">
+</head>
+<body>
+	<canvas id="canvas" style="display: block;margin: 50px auto;border: 1px solid #000;">
+		浏览器不支持canvas，请更换浏览器！
+	</canvas>
+
+	<script>
+		window.onload = function (){
+
+			var canvas = document.getElementById('canvas');
+
+			canvas.width = 800;
+			canvas.height = 800;
+
+			var context = canvas.getContext("2d");
+
+			//开始绘图
+			
+			fillRoundRect(context,150,150,500,500,10,"#bbada0");
+			    for (var i = 0; i < 4; i++) {
+			    	for (var j = 0; j < 4; j++) {
+			    		fillRoundRect(context,170+i*120,170+j*120,100,100,6,"#ccc0b3");
+			    	}
+			    }
+
+		}
+
+		function fillRoundRect(cxt,x,y,width,height,radius,fillColor){
+
+			if (2*radius > width || 2*radius > height ) {
+				return;
+			}
+
+			cxt.save();
+
+			cxt.translate( x , y);
+			
+			pathRoundRect(cxt,width,height,radius);
+
+		    cxt.fillStyle = fillColor || "black";
+		    // cxt.strokeStyle = "black";
+
+		    cxt.fill();
+		    // cxt.stroke();
+
+		    cxt.restore();
+		}
+
+		function strokeRoundRect(cxt,x,y,width,height,radius){
+
+			cxt.save();
+
+			cxt.translate( x , y);
+			
+			pathRoundRect(cxt,width,height,radius);
+
+		    // cxt.fillStyle = "#fb3";
+		    cxt.strokeStyle = "black";
+
+		    // cxt.fill();
+		    cxt.stroke();
+
+		    cxt.restore();
+		}
+
+		function pathRoundRect(cxt,width,height,radius){
+
+            cxt.beginPath();
+            
+            cxt.arc(radius,radius,radius,Math.PI,3/2*Math.PI);
+            cxt.lineTo(width - radius,0);
+            cxt.arc(width - radius,radius,radius,3/2*Math.PI,2*Math.PI);
+            cxt.lineTo(width,height - radius);
+            cxt.arc(width - radius,height - radius,radius,0,1/2*Math.PI);
+            cxt.lineTo(radius,height);
+            cxt.arc(radius,height - radius,radius,1/2*Math.PI,Math.PI);
+            cxt.lineTo(0,radius);
+            
+            cxt.closePath();
+		}
+		</script>
+</body>
+</html>

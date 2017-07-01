@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>clip</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0">
+</head>
+<body>
+	<canvas id="canvas" style="display: block;margin: 50px auto;border:1px solid #000;">不支持
+		浏览器不支持canvas，请更新浏览器！
+	</canvas>
+	<script >
+	var balls = {x:400,y:400,radius:150,vx:Math.random()*5+10,vy:Math.random()*5+10,rot:0};
+
+	var canvas = document.getElementById('canvas');
+
+            canvas.width = 800;
+            canvas.height = 800;
+
+            var context = canvas.getContext("2d");
+
+		window.onload = function(){
+            
+
+            setInterval(
+                function(){
+                	drawballs(context);
+                	update();
+                },
+                50
+            )	 
+	    }
+
+	    function drawballs(cxt){
+
+	    	var canvas = cxt.canvas;
+
+	    	cxt.clearRect(0,0,canvas.width,canvas.height);
+
+	    	cxt.save();
+
+	    	cxt.beginPath();
+	    	cxt.fillStyle = "black";
+	    	cxt.fillRect(0,0,canvas.width,canvas.height);
+
+	    	cxt.beginPath();
+	    	drawStar(cxt,balls.x,balls.y,balls.radius,balls.rot);
+	    	cxt.fillStyle = "#fff";
+	    	cxt.fill();
+	    	cxt.clip();
+
+	    	cxt.font = "bold 150px Arial";
+	    	cxt.textAlign = "center";
+	    	cxt.textBaseline = "middle";
+	    	cxt.fillStyle = "#058";
+	    	cxt.fillText("CANVAS",canvas.width / 2,canvas.height / 4);
+	    	cxt.fillText("CANVAS",canvas.width / 2,canvas.height / 2);
+	    	cxt.fillText("CANVAS",canvas.width / 2,canvas.height*3/4);
+
+	    	cxt.restore();
+	    }
+
+	    function update(){
+
+	    	//伸缩
+
+	    	if(balls.radius>700)
+	    		increase = false;
+	    	else if (balls.radius<200)
+	    		increase = true;
+
+	    	if(increase)
+	    		balls.radius += 5;
+	    	else
+	    		balls.radius -= 5;
+
+	    	//运动
+
+			 //    balls.rot++;
+				
+				// balls.x += balls.vx ;
+				// balls.y += balls.vy ;
+
+				// if(balls.x>canvas.width - balls.radius ){
+				// 	balls.x = canvas.width - balls.radius ;
+				// 	balls.vx = -balls.vx;
+				// } 
+				// if(balls.x<balls.radius ){
+				// 	balls.x = balls.radius ;
+				// 	balls.vx = -balls.vx;
+				// } 
+
+				// if(balls.y>canvas.height - balls.radius ){
+				// 	balls.y = canvas.height - balls.radius ;
+				// 	balls.vy = -balls.vy;
+				// } 
+				// if(balls.y<balls.radius ){
+				// 	balls.y = balls.radius ;
+				// 	balls.vy = -balls.vy;
+				// }    
+			
+		}
+
+		function drawStar(cxt,x,y,R,rot){
+
+			cxt.save();
+
+			cxt.translate( x , y);
+			cxt.rotate(rot/180*Math.PI);
+			cxt.scale(R,R);
+
+			starPath(cxt);
+
+		    cxt.fillStyle = "#fb3";
+		    cxt.fill();
+
+		    cxt.restore();
+		}
+
+		function starPath(cxt){
+
+			cxt.beginPath();
+		    for (var i = 0; i < 5; i++) {
+		    	cxt.lineTo( Math.cos( (18 + i*72 )/180*Math.PI),
+		    					-Math.sin( (18 + i*72 )/180*Math.PI) );
+		    	cxt.lineTo( Math.cos( (54 + i*72 )/180*Math.PI)*0.5,
+		    					-Math.sin( (54 + i*72 )/180*Math.PI)*0.5 );
+		    }
+		    cxt.closePath();
+		}
+	</script>
+</body>
+</html>
